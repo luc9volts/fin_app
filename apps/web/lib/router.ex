@@ -6,7 +6,13 @@ defmodule FinAppRouter do
   plug(:dispatch)
 
   post "/create" do
-    send_resp(conn, 200, Poison.encode!(%{response: create_account()}))
+    {status, body} =
+      case create_account() do
+        :ok -> {200, "account created"}
+        _ -> {422, "error"}
+      end
+
+    send_resp(conn, status, body)
   end
 
   defp create_account() do
