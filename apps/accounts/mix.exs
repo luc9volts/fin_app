@@ -27,6 +27,7 @@ defmodule Accounts.MixProject do
       {:commands, in_umbrella: true},
       {:events, in_umbrella: true},
       {:commanded, "~> 0.18"},
+      {:eventstore, "~> 0.16"},
       {:jason, "~> 1.1"}
     ]
   end

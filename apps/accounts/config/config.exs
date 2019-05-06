@@ -1,6 +1,13 @@
 use Mix.Config
 
-config :commanded, event_store_adapter: Commanded.EventStore.Adapters.InMemory
+config :eventstore, column_data_type: "jsonb"
 
-config :commanded, Commanded.EventStore.Adapters.InMemory,
-  serializer: Commanded.Serialization.JsonSerializer
+config :eventstore, EventStore.Storage,
+  serializer: EventStore.JsonbSerializer,
+  types: EventStore.PostgresTypes,
+  username: "postgres",
+  password: "postgres",
+  database: "eventstore_dev",
+  hostname: "localhost",
+  pool_size: 10,
+  pool_overflow: 5
