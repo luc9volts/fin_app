@@ -33,6 +33,10 @@ defmodule Account do
     }
   end
 
+  def execute(%Account{balance: balance, account_number: number}, %WithdrawFunds{amount: amount})
+      when amount > balance,
+      do: {:error, "Insufficient funds: account_number: #{number}, balance: #{balance}"}
+
   def execute(_, %WithdrawFunds{} = cmd) do
     %FundsWithdrawn{
       transfer_id: cmd.transfer_id,
