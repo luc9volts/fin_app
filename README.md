@@ -33,7 +33,7 @@ Create and initialize the event store:
 
 ## Features
 
-###"New account" :
+### "New account" :
 
     POST /create HTTP/1.1
     Host: localhost:4004
@@ -43,7 +43,7 @@ Create and initialize the event store:
         "account_number":"acc001"
     }
 
-###"Send funds" :
+### "Send funds" :
 
     POST /send HTTP/1.1
     Host: localhost:4004
@@ -55,7 +55,7 @@ Create and initialize the event store:
         "amount":999
     }
 
-###_"Withdraw" :_
+### "Withdraw" :
 
     POST /withdraw HTTP/1.1
     Host: localhost:4004
