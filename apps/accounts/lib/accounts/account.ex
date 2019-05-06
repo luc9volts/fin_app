@@ -1,6 +1,6 @@
 defmodule Account do
   defstruct account_number: nil,
-            balance: nil
+            balance: 0
 
   # Execute commands
   def execute(%Account{account_number: nil}, %CreateAccount{} = create_account) do
@@ -12,6 +12,17 @@ defmodule Account do
 
   def execute(%Account{}, %CreateAccount{}), do: {:error, :account_already_created}
 
+  def execute(%Account{balance: balance}, %SendFunds{amount: amount}) when amount > balance,
+    do: {:error, balance}
+
+  def execute(_, %SendFunds{} = cmd) do
+    %FundsSent{
+      transfer_id: cmd.transfer_id,
+      credit_account: cmd.credit_account,
+      amount: cmd.amount
+    }
+  end
+
   # Changing state of the Account
   def apply(%Account{} = account, %AccountCreated{} = created_account) do
     %Account{
@@ -21,7 +32,17 @@ defmodule Account do
     }
   end
 
-  # def apply(%Account{} = account, %ChallengeStarted{}) do
-  #   %Account{account | balance: :active}
-  # end
+  def apply(%Account{} = account, %FundsSent{} = event) do
+    %Account{
+      account
+      | balance: account.balance - event.amount
+    }
+  end
+
+  def apply(%Account{} = account, %FundsReceived{} = event) do
+    %Account{
+      account
+      | balance: account.balance + event.amount
+    }
+  end
 end
