@@ -8,11 +8,8 @@ defmodule FinAppRouter do
   post "/create" do
     {status, body} =
       case conn.body_params do
-        %{"account_number" => account_number} ->
-          {200, create_account(account_number)}
-
-        _ ->
-          {422, "erro"}
+        %{"account_number" => account_number} -> format_return(create_account(account_number))
+        _ -> {400, :bad_request}
       end
 
     send_resp(conn, status, Poison.encode!(body))
@@ -26,14 +23,16 @@ defmodule FinAppRouter do
           "credit_account" => credit_account,
           "amount" => amount
         } ->
-          {200, transf_account(debit_account, credit_account, amount)}
+          format_return(transf_account(debit_account, credit_account, amount))
 
         _ ->
-          {422, "erro"}
+          {400, :bad_request}
       end
 
     send_resp(conn, status, Poison.encode!(body))
   end
+
+  match(_, do: send_resp(conn, 404, "oops"))
 
   defp create_account(account_number) do
     %CreateAccount{
@@ -52,5 +51,11 @@ defmodule FinAppRouter do
     |> AccountRouter.dispatch()
   end
 
-  match(_, do: send_resp(conn, 404, "oops"))
+  defp format_return(:ok) do
+    {200, "success"}
+  end
+
+  defp format_return({:error, msg}) do
+    {422, msg}
+  end
 end
