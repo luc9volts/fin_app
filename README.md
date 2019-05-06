@@ -34,6 +34,7 @@ Create and initialize the event store:
 ## Features
 
 ###_"New account" :_
+
     POST /create HTTP/1.1
     Host: localhost:4004
     Content-Type: application/json
@@ -43,6 +44,7 @@ Create and initialize the event store:
     }
 
 ###_"Send funds" :_
+
     POST /send HTTP/1.1
     Host: localhost:4004
     Content-Type: application/json
@@ -54,6 +56,7 @@ Create and initialize the event store:
     }
 
 ###_"Withdraw" :_
+
     POST /withdraw HTTP/1.1
     Host: localhost:4004
     Content-Type: application/json
