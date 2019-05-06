@@ -12,8 +12,9 @@ defmodule Account do
 
   def execute(%Account{}, %CreateAccount{}), do: {:error, :account_already_created}
 
-  def execute(%Account{balance: balance}, %SendFunds{amount: amount}) when amount > balance,
-    do: {:error, "Insufficient funds: #{balance}"}
+  def execute(%Account{balance: balance, account_number: number}, %SendFunds{amount: amount})
+      when amount > balance,
+      do: {:error, "Insufficient funds: account_number #{number}, balance: #{balance}"}
 
   def execute(_, %SendFunds{} = cmd) do
     %FundsSent{
