@@ -1,6 +1,7 @@
 defmodule Account do
   defstruct account_number: nil,
-            balance: 0
+            balance: 0,
+            notified_about_withdraw: nil
 
   # Execute commands
   def execute(%Account{account_number: nil}, %CreateAccount{} = create_account) do
@@ -32,6 +33,22 @@ defmodule Account do
     }
   end
 
+  def execute(_, %WithdrawFunds{} = cmd) do
+    %FundsWithdrawn{
+      transfer_id: cmd.transfer_id,
+      account_number: cmd.account_number,
+      amount: cmd.amount
+    }
+  end
+
+  def execute(_, %SendEmail{} = cmd) do
+    %EmailSent{
+      transfer_id: cmd.transfer_id,
+      account_number: cmd.account_number,
+      amount: cmd.amount
+    }
+  end
+
   # Changing state of the Account
   def apply(%Account{} = account, %AccountCreated{} = created_account) do
     %Account{
@@ -52,6 +69,20 @@ defmodule Account do
     %Account{
       account
       | balance: account.balance + event.amount
+    }
+  end
+
+  def apply(%Account{} = account, %FundsWithdrawn{} = event) do
+    %Account{
+      account
+      | balance: account.balance - event.amount
+    }
+  end
+
+  def apply(%Account{} = account, %EmailSent{}) do
+    %Account{
+      account
+      | notified_about_withdraw: true
     }
   end
 end
