@@ -15,7 +15,7 @@ defmodule FinAppRouter do
     send_resp(conn, status, Poison.encode!(body))
   end
 
-  post "/transf" do
+  post "/send" do
     {status, body} =
       case conn.body_params do
         %{
