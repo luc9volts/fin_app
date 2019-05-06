@@ -23,6 +23,14 @@ defmodule Account do
     }
   end
 
+  def execute(_, %ReceiveFunds{} = cmd) do
+    %FundsReceived{
+      transfer_id: cmd.transfer_id,
+      debit_account: cmd.account_number,
+      amount: cmd.amount
+    }
+  end
+
   # Changing state of the Account
   def apply(%Account{} = account, %AccountCreated{} = created_account) do
     %Account{
